@@ -16,10 +16,11 @@ This Python script extracts the most dominant colors from one or more images usi
 - csv
 - json
 - PIL (Pillow)
+- termcolor
 - matplotlib
 You can install these with pip:
 ```bash
-pip install scikit-learn numpy argparse csv json pillow matplotlib
+pip install scikit-learn  numpy argparse csv json pillow matplotlib termcolor
 ```
 
 ### Usage

@@ -1,5 +1,6 @@
 from sklearn.cluster import KMeans
 import numpy as np
+from termcolor import colored
 import argparse
 import csv
 import json 

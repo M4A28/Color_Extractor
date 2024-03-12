@@ -26,8 +26,17 @@ def plot_colors(colors, filename):
     fig, ax = plt.subplots(1, 1, figsize=(12, 7.2), dpi=100)
     plt.axis('off')
     plt.imshow([colors.astype(int)], aspect='auto')
+
+    hex_colors = [rgb_to_hex(color) for color in colors]
+    x_positions = np.linspace(start=0, stop=1, num=len(hex_colors), endpoint=False)
+    for hex_color, pos in zip(hex_colors, x_positions):
+        plt.text(pos, 0.5, hex_color, color='white' if np.mean(colors) < 128 else 'black', 
+                 horizontalalignment='left', verticalalignment='top', 
+                 transform=ax.transAxes, rotation='vertical', fontsize=40)
+
     extent = ax.get_window_extent().transformed(fig.dpi_scale_trans.inverted())
     plt.savefig(filename, bbox_inches=extent)
+    
 
 def save_colors_to_file(colors, txt_filename, json_filename):
     hex_colors = [rgb_to_hex(color) for color in colors]
@@ -49,15 +58,18 @@ def main():
     args = parser.parse_args()
 
     for image_path in args.p:
-        colors = extract_colors(image_path, args.n)
-        txt_filename = f'{image_path}_colors.txt'
-        json_filename = f'{image_path}_colors.json'
-        save_colors_to_file(colors, txt_filename, json_filename)
-        plot_filename = f'{image_path}_color_palette.png'
-        plot_colors(colors, plot_filename)
-        print(f"Color palette saved as '{plot_filename}'")
-        print(f"Colors saved as '{txt_filename}' and '{json_filename}'")
-
+        try:
+            colors = extract_colors(image_path, args.n)
+            txt_filename = f'{image_path}_colors.txt'
+            json_filename = f'{image_path}_colors.json'
+            # save_colors_to_file(colors, txt_filename, json_filename)
+            plot_filename = f'{image_path}_color_palette.png'
+            plot_colors(colors, plot_filename)
+            print(f"Color palette saved as '{plot_filename}'")
+            # print(f"Colors saved as '{txt_filename}' and '{json_filename}'")
+        except Exception:
+            print(colored(f"Image {image_path} color not extracted", 'red'))
+            pass
 
 if __name__ == '__main__':
     main()
